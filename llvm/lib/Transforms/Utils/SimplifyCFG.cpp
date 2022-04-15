@@ -87,7 +87,7 @@
 #include <tuple>
 #include <utility>
 #include <vector>
-#include "IRInfo.pb.h"
+#include "prototuf/IRInfo.pb.h"
 #include <fstream>
 #include <ostream>
 

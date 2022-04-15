@@ -87,3 +87,6 @@ add_llvm_component_library(LLVMTransformUtils
   Core
   Support
   )
+
+add_subdirectory(protobuf)
+target_link_libraries(LLVMTransformUtils PRIVATE Myproto)
