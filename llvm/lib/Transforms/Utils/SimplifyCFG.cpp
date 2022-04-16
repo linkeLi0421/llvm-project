@@ -87,7 +87,7 @@
 #include <tuple>
 #include <utility>
 #include <vector>
-#include "prototuf/IRInfo.pb.h"
+#include "protobuf/IRInfo.pb.h"
 #include <fstream>
 #include <ostream>
 
@@ -6720,7 +6720,6 @@ static bool removeUndefIntroducingPredecessor(BasicBlock *BB,
             dyn_cast<Instruction>(T->getOperand(0))->getDebugLoc().dump();
             dbgs() << "\n\n";
             //linke
-            IR_func_book = new irpb::IRFunctionBook();
             irpb::IRFunction *FMsg = IR_func_book->add_fs();
             FMsg->set_funcname(Funcname);
             irpb::IRBasicBlock *BBMsg = FMsg->add_bbs();
@@ -6730,6 +6729,16 @@ static bool removeUndefIntroducingPredecessor(BasicBlock *BB,
             DebugLoc DbL =  T->getDebugLoc();
             ILoc->set_lineno(DbL.getLine());
             ILoc->set_colno(DbL.getCol());
+
+            //linke
+            outs() << "Starting output conditional branch... \n";
+            std::fstream output("/llk/IRlog", std::ios::out | std::ios::trunc | std::ios::binary);
+            // if (!IR_func_book->SerializePartialToOstream(&output)) {
+            if (!IR_func_book->SerializeToOstream(&output)) {  
+                outs() << "Failed to write IR msg. \n";
+            }
+            output.close();
+            outs() << "Finish of dumping IR Info. \n";
 
             // Preserve guarding condition in assume, because it might not be
             // inferrable from any dominating condition.
@@ -6943,6 +6952,7 @@ bool SimplifyCFGOpt::simplifyOnce(BasicBlock *BB) {
 
 bool SimplifyCFGOpt::run(BasicBlock *BB) {
   bool Changed = false;
+  IR_func_book = new irpb::IRFunctionBook();
 
   // Repeated simplify BB as long as resimplification is requested.
   do {
@@ -6954,16 +6964,12 @@ bool SimplifyCFGOpt::run(BasicBlock *BB) {
     // if (BB->getParent() && BB->getParent()->getName() == "gem_poll") {
     //   dbgs() << "###1";
     // }
-    //linke
-    outs() << "Starting output conditional branch... \n";
-    std::fstream output("/llk/IRlog", std::ios::out | std::ios::trunc | std::ios::binary);
-    if (!IR_func_book->SerializePartialToOstream(&output)) {
-        outs() << "Failed to write IR msg. \n";
-    }
-    output.close();
-    outs() << "Finish of dumping IR Info. \n";
+    // for(int i = 0; i<IR_func_book->fs_size() ; i++){
+    //   irpb::IRFunction irf=IR_func_book->fs(i);
+    //   outs() << irf.funcname();
+    // }
   } while (Resimplify);
-
+  
   return Changed;
 }
 
