@@ -6725,16 +6725,26 @@ static bool removeUndefIntroducingPredecessor(BasicBlock *BB,
             irpb::IRBasicBlock *BBMsg = FMsg->add_bbs();
             BBMsg->set_bblabel(BBname);
             irpb::IRInst *IMsg = BBMsg->add_is();
-            irpb::InstLoc *ILoc = IMsg->add_locs();
-            DebugLoc DbL =  T->getDebugLoc();
-            ILoc->set_lineno(DbL.getLine());
-            ILoc->set_colno(DbL.getCol());
+            // irpb::InstLoc *ILoc = IMsg->add_locs();
+            DebugLoc DbL =  dyn_cast<Instruction>(T->getOperand(0))->getDebugLoc();
+            DebuginfoList DIL;
+            bool status = false;
+            dyn_cast<Instruction>(T->getOperand(0))->getDebugInfoTree(DIL, status);
+            if (status) {
+                for (auto &DebugInfo : DIL) {
+                    irpb::InstLoc *LocMsg = IMsg->add_locs();
+                    LocMsg->set_filename(std::get<0>(DebugInfo));
+                    LocMsg->set_lineno(std::get<1>(DebugInfo));
+                    LocMsg->set_colno(std::get<2>(DebugInfo));
+                }
+            }
+            // ILoc->set_lineno(DbL.getLine());
+            // ILoc->set_colno(DbL.getCol());
 
             //linke
             outs() << "Starting output conditional branch... \n";
             std::fstream output("/llk/IRlog", std::ios::out | std::ios::trunc | std::ios::binary);
-            // if (!IR_func_book->SerializePartialToOstream(&output)) {
-            if (!IR_func_book->SerializeToOstream(&output)) {  
+            if (!IR_func_book->SerializePartialToOstream(&output)) {
                 outs() << "Failed to write IR msg. \n";
             }
             output.close();
@@ -6964,10 +6974,7 @@ bool SimplifyCFGOpt::run(BasicBlock *BB) {
     // if (BB->getParent() && BB->getParent()->getName() == "gem_poll") {
     //   dbgs() << "###1";
     // }
-    // for(int i = 0; i<IR_func_book->fs_size() ; i++){
-    //   irpb::IRFunction irf=IR_func_book->fs(i);
-    //   outs() << irf.funcname();
-    // }
+
   } while (Resimplify);
   
   return Changed;
