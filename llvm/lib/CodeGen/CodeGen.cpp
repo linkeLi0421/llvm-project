@@ -124,6 +124,7 @@ void llvm::initializeCodeGen(PassRegistry &Registry) {
   initializeWinEHPreparePass(Registry);
   initializeXRayInstrumentationPass(Registry);
   // dingzhu patch
+  initializeIRDumper(Registry);
   initializeMarkInstIndexPass(Registry);
   initializeMyMIRPrinterPass(Registry);
   initializeMyMIRDumperPass(Registry);

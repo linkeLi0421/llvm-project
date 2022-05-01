@@ -1103,6 +1103,7 @@ bool TargetPassConfig::addCoreISelPasses() {
 
 bool TargetPassConfig::addISelPasses() {
   // dingzhu patch
+  addPass(createIRDumper());
   addPass(createMarkInstIndexPass());
   if (EnableMyIRDumperPass)
     addPass(createMyIRDumperPass());
