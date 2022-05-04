@@ -438,6 +438,8 @@ namespace llvm {
   ModulePass *createPreISelIntrinsicLoweringPass();
 
   /// dingzhu patch
+  ModulePass *createIRDumperPass();
+
   FunctionPass *createMarkInstIndexPass();
 
   FunctionPass *createMyIRDumperPass();
