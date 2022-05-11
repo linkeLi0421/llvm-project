@@ -6743,7 +6743,7 @@ static bool removeUndefIntroducingPredecessor(BasicBlock *BB,
 
             //linke
             outs() << "Starting output conditional branch... \n";
-            std::fstream output("/llk/IRlog", std::ios::out | std::ios::trunc | std::ios::binary);
+            std::fstream output("/llk/IRlog", std::ios::out | std::ios::app | std::ios::binary);
             if (!IR_func_book->SerializePartialToOstream(&output)) {
                 outs() << "Failed to write IR msg. \n";
             }
