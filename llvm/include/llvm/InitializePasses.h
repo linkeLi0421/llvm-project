@@ -459,7 +459,6 @@ void initializeWriteBitcodePassPass(PassRegistry&);
 void initializeWriteThinLTOBitcodePass(PassRegistry&);
 void initializeXRayInstrumentationPass(PassRegistry&);
 // dingzhu patch
-void initializeIRDumperPass(PassRegistry&);
 void initializeMarkInstIndexPass(PassRegistry&);
 void initializeMyMIRPrinterPass(PassRegistry&);
 void initializeMyMIRDumperPass(PassRegistry&);

@@ -198,7 +198,6 @@ add_llvm_component_library(LLVMCodeGen
   LiveDebugValues/VarLocBasedImpl.cpp
   LiveDebugValues/InstrRefBasedImpl.cpp
 
-  IRDumper.cpp
   MarkInstIndex.cpp
   MyMIRPrinter.cpp
   MyMIRDumper.cpp
